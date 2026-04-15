@@ -3,76 +3,144 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>PixelForge Network | Minecraftサーバー</title>
+    <title>Atu Server | まったり遊べるMinecraftコミュニティ</title>
+    <meta
+      name="description"
+      content="Atu Server公式紹介サイト。サバイバル・ミニゲーム・イベントを楽しめる初心者歓迎のMinecraftコミュニティ。参加案内はDiscordから。"
+    />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+JP:wght@400;500;700;800&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <header class="hero">
+    <header class="hero" id="top">
       <div class="hero__overlay"></div>
-      <nav class="nav">
-        <div class="logo">PixelForge Network</div>
-        <a class="btn btn--small" href="#join">今すぐ参加</a>
+      <nav class="nav container">
+        <div class="logo">Atu Server</div>
+        <div class="nav__links">
+          <a href="#about">サーバー紹介</a>
+          <a href="#join">参加方法</a>
+          <a class="btn btn--small" href="https://discord.gg/atuserver" target="_blank" rel="noreferrer">Discordで参加する</a>
+        </div>
       </nav>
 
-      <div class="hero__content">
-        <p class="badge">JAVA & BEDROCK 対応</p>
-        <h1>君の冒険が、ここから始まる。</h1>
-        <p class="lead">
-          サバイバル・経済・イベントが融合した、24時間稼働のMinecraftサーバー。
-          仲間と街を作り、ダンジョンを攻略し、最強のクランを目指そう！
+      <section class="hero__content container">
+        <p class="tag">Java版 + 統合版 対応</p>
+        <h1>自然と冒険が息づく、<br />やさしいファンタジー世界へ。</h1>
+        <p class="subcopy">おしゃれでまったり。でも、遊びごたえはしっかり。</p>
+        <p class="description">
+          Atu Serverは、初心者からベテランまで気軽に楽しめるMinecraftコミュニティです。
+          サバイバルで拠点を育て、ミニゲームで盛り上がり、定期イベントでみんなと冒険。
+          参加案内はDiscordでわかりやすくサポートしています。
         </p>
 
-        <div class="ip-card" aria-label="サーバーIP">
-          <span class="ip-card__label">サーバーIP</span>
-          <code id="server-ip">play.pixelforge.jp</code>
-          <button class="btn btn--ghost" id="copy-btn" type="button">IPをコピー</button>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="https://discord.gg/atuserver" target="_blank" rel="noreferrer">参加する</a>
+          <a class="btn btn--ghost" href="#about">詳細を見る</a>
+          <a class="btn btn--ghost" href="#join">遊び方を確認</a>
         </div>
-
-        <a id="join" class="btn btn--primary" href="minecraft://?addExternalServer=PixelForge|play.pixelforge.jp:25565" aria-label="サーバーに参加する">参加する</a>
-      </div>
+      </section>
     </header>
 
     <main>
-      <section class="features">
-        <article class="card">
-          <h2>自由建築ワールド</h2>
-          <p>保護機能つきで、初心者でも安心して拠点づくりを楽しめます。</p>
-        </article>
-        <article class="card">
-          <h2>毎週イベント開催</h2>
-          <p>PvP大会・建築コンテスト・レイドバトルなど、参加型企画が盛りだくさん。</p>
-        </article>
-        <article class="card">
-          <h2>アクティブなコミュニティ</h2>
-          <p>日本語メインのフレンドリーな雰囲気。ソロでもすぐ仲間が見つかる！</p>
-        </article>
+      <section class="section container" id="about">
+        <div class="section__head">
+          <p class="eyebrow">Server Overview</p>
+          <h2>Atu Serverの特徴</h2>
+          <p>サバイバル・ミニゲーム・イベントを中心に、のんびり遊べる世界を用意しています。</p>
+        </div>
+
+        <div class="grid grid--features">
+          <article class="card">
+            <h3>初心者歓迎</h3>
+            <p>はじめての人にもわかりやすいガイドと、やさしいコミュニティで安心してスタートできます。</p>
+          </article>
+          <article class="card">
+            <h3>カスタムプラグイン多数</h3>
+            <p>便利機能や独自要素を取り入れて、快適さとワクワク感を両立しています。</p>
+          </article>
+          <article class="card">
+            <h3>定期イベントあり</h3>
+            <p>建築企画やバトルイベントなど、みんなで楽しめる企画を定期開催しています。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section section--soft" id="modes">
+        <div class="container">
+          <div class="section__head">
+            <p class="eyebrow">Game Modes</p>
+            <h2>それぞれのサーバー紹介</h2>
+            <p>気分に合わせて遊び方を選べる、複数の楽しみ方があります。</p>
+          </div>
+
+          <div class="grid grid--modes">
+            <article class="card card--mode">
+              <h3>サバイバル鯖</h3>
+              <p>素材集め・建築・農業など、まったり長く遊べるメインワールド。仲間との街づくりが人気です。</p>
+              <a class="text-link" href="https://discord.gg/atuserver" target="_blank" rel="noreferrer">詳細を見る →</a>
+            </article>
+            <article class="card card--mode">
+              <h3>ミニゲーム鯖</h3>
+              <p>短時間でも楽しめる対戦・協力コンテンツを用意。友達と気軽にワイワイ遊べます。</p>
+              <a class="text-link" href="https://discord.gg/atuserver" target="_blank" rel="noreferrer">遊ぶには？ →</a>
+            </article>
+            <article class="card card--mode">
+              <h3>イベント鯖</h3>
+              <p>季節イベントや期間限定企画を開催。普段とは違う特別な冒険が待っています。</p>
+              <a class="text-link" href="https://discord.gg/atuserver" target="_blank" rel="noreferrer">開催情報を見る →</a>
+            </article>
+            <article class="card card--mode card--accent">
+              <h3>Mod鯖</h3>
+              <p>魔法・冒険・拡張要素を取り入れた、ファンタジー感のある上級者向けワールド。導入方法はDiscordで丁寧に案内します。</p>
+              <a class="text-link" href="https://discord.gg/atuserver" target="_blank" rel="noreferrer">Mod導入ガイドへ →</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section container" id="join">
+        <div class="section__head">
+          <p class="eyebrow">How to Join</p>
+          <h2>参加方法（初心者向け）</h2>
+          <p>サーバーIDはDiscord内でご案内しています。まずはコミュニティに参加してください。</p>
+        </div>
+
+        <div class="join-columns">
+          <article class="card join-card">
+            <h3>Java版の参加手順</h3>
+            <ol>
+              <li>「参加する」ボタンからDiscordに参加する</li>
+              <li>「参加案内」チャンネルを開く</li>
+              <li>案内された情報をMinecraft Java版に入力して接続</li>
+              <li>初回ガイドを確認して、ワールドに参加</li>
+            </ol>
+            <a class="btn btn--secondary" href="https://discord.gg/atuserver" target="_blank" rel="noreferrer">Java版で参加する</a>
+          </article>
+
+          <article class="card join-card">
+            <h3>統合版の参加手順</h3>
+            <ol>
+              <li>Discordで「統合版向け案内」を確認する</li>
+              <li>フレンド追加または外部サーバー追加の手順を読む</li>
+              <li>案内どおり設定して接続する</li>
+              <li>困ったらサポートチャンネルで質問する</li>
+            </ol>
+            <a class="btn btn--secondary" href="https://discord.gg/atuserver" target="_blank" rel="noreferrer">統合版で参加する</a>
+          </article>
+        </div>
       </section>
     </main>
 
-    <footer>
-      <small>© 2026 PixelForge Network. Not affiliated with Mojang.</small>
+    <footer class="footer">
+      <div class="container footer__inner">
+        <p>© 2026 Atu Server</p>
+        <a href="https://discord.gg/atuserver" target="_blank" rel="noreferrer">Discordで最新情報を見る</a>
+      </div>
     </footer>
-
-    <script>
-      const copyBtn = document.getElementById('copy-btn');
-      const serverIp = document.getElementById('server-ip').textContent;
-
-      copyBtn.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(serverIp);
-          copyBtn.textContent = 'コピー完了!';
-          setTimeout(() => (copyBtn.textContent = 'IPをコピー'), 1500);
-        } catch {
-          copyBtn.textContent = '手動でコピーしてね';
-          setTimeout(() => (copyBtn.textContent = 'IPをコピー'), 2000);
-        }
-      });
-    </script>
   </body>
 </html>
