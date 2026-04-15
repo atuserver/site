@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PixelForge Network | Minecraftサーバー</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__overlay"></div>
+      <nav class="nav">
+        <div class="logo">PixelForge Network</div>
+        <a class="btn btn--small" href="#join">今すぐ参加</a>
+      </nav>
+
+      <div class="hero__content">
+        <p class="badge">JAVA & BEDROCK 対応</p>
+        <h1>君の冒険が、ここから始まる。</h1>
+        <p class="lead">
+          サバイバル・経済・イベントが融合した、24時間稼働のMinecraftサーバー。
+          仲間と街を作り、ダンジョンを攻略し、最強のクランを目指そう！
+        </p>
+
+        <div class="ip-card" aria-label="サーバーIP">
+          <span class="ip-card__label">サーバーIP</span>
+          <code id="server-ip">play.pixelforge.jp</code>
+          <button class="btn btn--ghost" id="copy-btn" type="button">IPをコピー</button>
+        </div>
+
+        <a id="join" class="btn btn--primary" href="minecraft://?addExternalServer=PixelForge|play.pixelforge.jp:25565" aria-label="サーバーに参加する">参加する</a>
+      </div>
+    </header>
+
+    <main>
+      <section class="features">
+        <article class="card">
+          <h2>自由建築ワールド</h2>
+          <p>保護機能つきで、初心者でも安心して拠点づくりを楽しめます。</p>
+        </article>
+        <article class="card">
+          <h2>毎週イベント開催</h2>
+          <p>PvP大会・建築コンテスト・レイドバトルなど、参加型企画が盛りだくさん。</p>
+        </article>
+        <article class="card">
+          <h2>アクティブなコミュニティ</h2>
+          <p>日本語メインのフレンドリーな雰囲気。ソロでもすぐ仲間が見つかる！</p>
+        </article>
+      </section>
+    </main>
+
+    <footer>
+      <small>© 2026 PixelForge Network. Not affiliated with Mojang.</small>
+    </footer>
+
+    <script>
+      const copyBtn = document.getElementById('copy-btn');
+      const serverIp = document.getElementById('server-ip').textContent;
+
+      copyBtn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(serverIp);
+          copyBtn.textContent = 'コピー完了!';
+          setTimeout(() => (copyBtn.textContent = 'IPをコピー'), 1500);
+        } catch {
+          copyBtn.textContent = '手動でコピーしてね';
+          setTimeout(() => (copyBtn.textContent = 'IPをコピー'), 2000);
+        }
+      });
+    </script>
+  </body>
+</html>
