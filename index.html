@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Atu Mini Survival</title>
+    <style>
+      :root {
+        --bg1: #102014;
+        --bg2: #224a30;
+        --panel: rgba(9, 23, 14, 0.82);
+        --text: #e6ffe9;
+        --muted: #b9d9be;
+        --line: rgba(230, 255, 233, 0.18);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        color: var(--text);
+        background: linear-gradient(150deg, var(--bg1), var(--bg2));
+      }
+      main {
+        width: min(980px, 94vw);
+        margin: 0 auto;
+        padding: 1rem 0 1.5rem;
+      }
+      h1 {
+        margin: 0;
+        font-size: clamp(1.4rem, 3.6vw, 2.1rem);
+      }
+      .sub { color: var(--muted); margin: .4rem 0 1rem; }
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+        padding: .9rem;
+      }
+      .hud {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        font-weight: 700;
+        margin-bottom: .7rem;
+      }
+      canvas {
+        width: 100%;
+        height: auto;
+        display: block;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: linear-gradient(#9bd39d, #5f8c61);
+      }
+      .row {
+        margin-top: .7rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: .6rem;
+        align-items: center;
+      }
+      button, a {
+        border: 0;
+        border-radius: 10px;
+        padding: .58rem .86rem;
+        font-weight: 800;
+        text-decoration: none;
+      }
+      button { background: #7dff9c; color: #163022; cursor: pointer; }
+      a { border: 1px solid var(--line); color: var(--text); }
+      small { color: var(--muted); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Atu Mini Survival</h1>
+      <p class="sub">矢印キー / WASDで移動して宝石を集めよう（60秒）</p>
+      <section class="panel">
+        <div class="hud">
+          <span>Score: <b id="score">0</b></span>
+          <span>Time: <b id="time">60</b>s</span>
+          <span>Best: <b id="best">0</b></span>
+        </div>
+        <canvas id="game" width="900" height="500"></canvas>
+        <div class="row">
+          <button id="start">ゲーム開始</button>
+          <a href="https://discord.gg/atuserver" target="_blank" rel="noreferrer">Discord</a>
+          <small>宝石 +10 / 敵 -15</small>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const c = document.getElementById('game');
+      const x = c.getContext('2d');
+      const scoreEl = document.getElementById('score');
+      const timeEl = document.getElementById('time');
+      const bestEl = document.getElementById('best');
+      const startBtn = document.getElementById('start');
+      const keys = new Set();
+      const LIMIT = 60;
+      const SIZE = 22;
+      let g = null, raf = null, last = 0;
+
+      bestEl.textContent = localStorage.getItem('atu_best') || '0';
+
+      const rnd = (a, b) => Math.random() * (b - a) + a;
+      const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+
+      function reset() {
+        g = {
+          p: { x: c.width / 2, y: c.height / 2, s: 270 },
+          gem: { x: rnd(20, c.width - 20), y: rnd(20, c.height - 20), r: 11 },
+          mobs: Array.from({ length: 4 }, () => ({ x: rnd(20, c.width - 20), y: rnd(20, c.height - 20), vx: rnd(-160, 160), vy: rnd(-160, 160), r: 14 })),
+          score: 0,
+          t: LIMIT,
+          run: true
+        };
+        scoreEl.textContent = '0';
+        timeEl.textContent = String(LIMIT);
+      }
+
+      function input(dt) {
+        let dx = 0, dy = 0;
+        if (keys.has('arrowup') || keys.has('w')) dy -= 1;
+        if (keys.has('arrowdown') || keys.has('s')) dy += 1;
+        if (keys.has('arrowleft') || keys.has('a')) dx -= 1;
+        if (keys.has('arrowright') || keys.has('d')) dx += 1;
+        if (dx || dy) {
+          const len = Math.hypot(dx, dy) || 1;
+          g.p.x += dx / len * g.p.s * dt;
+          g.p.y += dy / len * g.p.s * dt;
+        }
+        g.p.x = Math.min(c.width - SIZE / 2, Math.max(SIZE / 2, g.p.x));
+        g.p.y = Math.min(c.height - SIZE / 2, Math.max(SIZE / 2, g.p.y));
+      }
+
+      function update(dt) {
+        g.t = Math.max(0, g.t - dt);
+        if (g.t === 0) g.run = false;
+
+        for (const m of g.mobs) {
+          m.x += m.vx * dt;
+          m.y += m.vy * dt;
+          if (m.x < m.r || m.x > c.width - m.r) m.vx *= -1;
+          if (m.y < m.r || m.y > c.height - m.r) m.vy *= -1;
+          if (dist(g.p, m) < SIZE / 2 + m.r) {
+            g.score = Math.max(0, g.score - 15);
+            g.p.x = c.width / 2;
+            g.p.y = c.height / 2;
+          }
+        }
+
+        if (dist(g.p, g.gem) < SIZE / 2 + g.gem.r) {
+          g.score += 10;
+          g.gem.x = rnd(20, c.width - 20);
+          g.gem.y = rnd(20, c.height - 20);
+        }
+      }
+
+      function draw() {
+        x.fillStyle = '#7db27d';
+        x.fillRect(0, 0, c.width, c.height);
+
+        x.beginPath();
+        x.fillStyle = '#2ef070';
+        x.moveTo(g.gem.x, g.gem.y - g.gem.r);
+        x.lineTo(g.gem.x + g.gem.r, g.gem.y);
+        x.lineTo(g.gem.x, g.gem.y + g.gem.r);
+        x.lineTo(g.gem.x - g.gem.r, g.gem.y);
+        x.closePath();
+        x.fill();
+
+        for (const m of g.mobs) {
+          x.beginPath();
+          x.fillStyle = '#60222d';
+          x.arc(m.x, m.y, m.r, 0, Math.PI * 2);
+          x.fill();
+        }
+
+        x.fillStyle = '#173322';
+        x.fillRect(g.p.x - SIZE / 2, g.p.y - SIZE / 2, SIZE, SIZE);
+
+        if (!g.run) {
+          x.fillStyle = 'rgba(0,0,0,.45)';
+          x.fillRect(0, 0, c.width, c.height);
+          x.fillStyle = '#ecffec';
+          x.textAlign = 'center';
+          x.font = '700 44px sans-serif';
+          x.fillText('TIME UP', c.width / 2, c.height / 2 - 8);
+          x.font = '700 28px sans-serif';
+          x.fillText('Score: ' + g.score, c.width / 2, c.height / 2 + 30);
+        }
+      }
+
+      function loop(t) {
+        if (!g) return;
+        const dt = Math.min((t - last) / 1000, .033);
+        last = t;
+        if (g.run) {
+          input(dt);
+          update(dt);
+          scoreEl.textContent = String(g.score);
+          timeEl.textContent = String(Math.ceil(g.t));
+          raf = requestAnimationFrame(loop);
+        } else {
+          const prev = Number(localStorage.getItem('atu_best') || 0);
+          if (g.score > prev) {
+            localStorage.setItem('atu_best', String(g.score));
+            bestEl.textContent = String(g.score);
+          }
+        }
+        draw();
+      }
+
+      startBtn.addEventListener('click', () => {
+        if (raf) cancelAnimationFrame(raf);
+        reset();
+        last = performance.now();
+        raf = requestAnimationFrame(loop);
+      });
+
+      addEventListener('keydown', e => keys.add(e.key.toLowerCase()));
+      addEventListener('keyup', e => keys.delete(e.key.toLowerCase()));
+
+      x.fillStyle = '#1c3927';
+      x.font = '700 36px sans-serif';
+      x.textAlign = 'center';
+      x.fillText('ゲーム開始を押してスタート', c.width / 2, c.height / 2);
+    </script>
+  </body>
+</html>
